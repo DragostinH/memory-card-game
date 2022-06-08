@@ -1,8 +1,13 @@
-export default function getArrayOfRandomNumbers(arrSize){
+export default function getArrayOfRandomNumbers(arrSize) {
     let arr = [];
-    for(let i = 0; i < arrSize; i++){
+    for (let i = 0; i < arrSize; i++) {
         let randNumber = Math.floor(Math.random() * 826);
-        arr.push(randNumber);
+        if (arr.indexOf(randNumber) === -1) {
+            arr.push(randNumber);
+        } else {
+            i--;
+        }
+
     }
     return arr;
 

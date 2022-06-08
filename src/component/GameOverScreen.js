@@ -18,7 +18,6 @@ export default function GameOverScreen(props) {
                     </button>
                 </div>
             </div>
-
         </div>
     )
 }
