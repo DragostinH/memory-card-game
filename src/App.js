@@ -22,8 +22,6 @@ export default function App() {
   // Include the already selected cards in the list of cards
 
   let currentLevel;
-  let passOrGameOver;
-
   const [cards, setCards] = useState([]);
   const [clickedCards, setClickedCards] = useState([]);
   const [gameSettings, setGameSettings] = useState({
@@ -52,6 +50,7 @@ export default function App() {
         ...gameSettings,
         passedStage: true,
       });
+      setClickedCards([]);
     }
   }, [clickedCards.length]);
 
@@ -73,7 +72,6 @@ export default function App() {
       });
     } else {
       setClickedCards([...clickedCards, card]);
-      setCards(cards.filter(element => element.id !== card.id));
       setGameSettings({
         ...gameSettings,
         score: gameSettings.score + 1,
@@ -94,6 +92,8 @@ export default function App() {
   }
 
   const handleNextLevelClick = () => {
+    shuffleArray(cards);
+    shuffleArray(clickedCards);
     setGameSettings({
       ...gameSettings,
       passedStage: false,

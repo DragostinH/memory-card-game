@@ -15,7 +15,7 @@ export default function LevelFour(props) {
             </div>
             <div className="card-container flex flex-wrap gap-4 justify-center">
                 {cards.map((card, index) => {
-                    while (index < 20 - clickedCards.length) {
+                    while (index < 16 - clickedCards.length) {
                         return (
                             <Card
                                 key={uniqid()}

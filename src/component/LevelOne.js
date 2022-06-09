@@ -17,7 +17,7 @@ export default function LevelOne(props) {
             </div>
             <div className="card-container grid grid-cols-3 gap-8 ">
                 {cards.map((card, index) => {
-                    while (index < 5 - clickedCards.length) {
+                    while (index < 4 - clickedCards.length) {
                         return (
                             <Card
                                 key={uniqid()}

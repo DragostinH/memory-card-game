@@ -15,7 +15,7 @@ export default function LevelTwo(props) {
             </div>
             <div className="card-container grid grid-cols-3 gap-4 ">
                 {cards.map((card, index) => {
-                    while (index < 10 - clickedCards.length) {
+                    while (index < 6 - clickedCards.length) {
                         return (
                             <Card
                                 key={uniqid()}

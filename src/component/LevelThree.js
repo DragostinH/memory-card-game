@@ -15,7 +15,7 @@ export default function LevelThree(props) {
             </div>
             <div className="card-container grid grid-cols-4 gap-4">
                 {cards.map((card, index) => {
-                    while (index < 15 - clickedCards.length) {
+                    while (index < 12 - clickedCards.length) {
                         return (
                             <Card
                                 key={uniqid()}
