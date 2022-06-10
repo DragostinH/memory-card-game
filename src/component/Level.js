@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "./Card";
 import uniqid from "uniqid";
+import "../index.css";
 
-export default function LevelOne(props) {
-
-
+export default function Level(props) {
     const { handleCardClick, gameSettings, cards, clickedCards } = props;
 
-
     return (
-        <article className="level-one-container">
-            <div className="score-level-container flex gap-8 items-center justify-center text-secondary-500">
-                <p>Score:  <span className='font-bold'>{gameSettings.score}</span></p>
-                <p>Level: <span className='font-bold'>{gameSettings.stage} - {gameSettings.level}</span></p>
-                <p>High score:  <span className='font-bold'>{gameSettings.highScore}</span></p>
+        <article className="level-container grid gap-8">
+            <div className="score-level-container grid grid-cols-score text-secondary-500">
+                <p className="text-center">Score:  <span className='font-bold'>{gameSettings.score}</span></p>
+                <p className="text-center">Level: <span className='font-bold'>{gameSettings.stage} - {gameSettings.level}</span></p>
+                <p className="text-center">High score:  <span className='font-bold'>{gameSettings.highScore}</span></p>
             </div>
-            <div className="card-container grid grid-cols-3 gap-8 ">
+            <div className="card-container grid grid-cols-cards gap-4">
                 {cards.map((card, index) => {
                     while (index < gameSettings.boardSize - clickedCards.length) {
                         return (

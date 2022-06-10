@@ -5,7 +5,7 @@ export default function PassedLevelScreen(props) {
     const { handleNextLevelClick, gameSettings } = props;
 
     return (
-        <div className="absolute bg-[rgba(0,0,0,0.8)] flex items-center justify-center border-2 z-10 w-full
+        <div className="absolute bg-[rgba(0,0,0,1)] flex items-center justify-center border-2 z-10 w-full
         h-[90%]">
                 <div className="grid border-2 border-secondary-500 bg-primary-900 text-secondary-200 p-4 rounded-xl">
                     <h1 className="text-2xl font-bold">Congratulations!</h1>

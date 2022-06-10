@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import './App.css';
-import Card from './component/Card';
-import uniqid from 'uniqid';
 import getArrayOfRandomNumbers from './scripts/getArrayOfRandomNumbers';
 import GameOverScreen from './component/GameOverScreen';
 import shuffleArray from './scripts/shuffleArray';
@@ -10,6 +8,7 @@ import LevelTwo from './component/LevelTwo';
 import PassedLevelScreen from './component/PassedLevelScreen';
 import LevelThree from './component/LevelThree';
 import LevelFour from './component/LevelFour';
+import Level from './component/Level';
 
 export default function App() {
   // Find images for the cards
@@ -31,6 +30,7 @@ export default function App() {
     highScore: 0,
     isGameOver: false,
     passedStage: false,
+    boardSize: 4,
   });
 
 
@@ -45,23 +45,24 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (gameSettings.level === 5) {
+    if (clickedCards.length === gameSettings.boardSize) {
       setGameSettings({
         ...gameSettings,
         passedStage: true,
+        boardSize: gameSettings.boardSize + 3,
       });
       setClickedCards([]);
     }
-  }, [clickedCards.length]);
+  }, [clickedCards.length, gameSettings]);
 
 
   const handleCardClick = (card) => {
-    shuffleArray(cards);
     let isCardClicked = clickedCards.find(clickedCard => {
       if (clickedCard.id === card.id) {
         return true;
       } else {
         return false;
+
       }
     });
 
@@ -70,13 +71,16 @@ export default function App() {
         ...gameSettings,
         isGameOver: true,
       });
-    } else {
+    } else  {
       setClickedCards([...clickedCards, card]);
+      setCards(cards.filter(item => item.id !== card.id));
+      setCards(shuffleArray(cards));
       setGameSettings({
         ...gameSettings,
         score: gameSettings.score + 1,
         level: gameSettings.level + 1,
       });
+      
     }
   }
 
@@ -87,7 +91,9 @@ export default function App() {
       score: 0,
       level: 1,
       stage: 1,
+      boardSize: 4,
     });
+    setCards(shuffleArray(cards));
     setClickedCards([]);
   }
 
@@ -102,40 +108,11 @@ export default function App() {
     })
   }
 
-  if (gameSettings.stage === 1) {
-    currentLevel = <LevelOne
-      cards={cards}
-      handleCardClick={handleCardClick}
-      gameSettings={gameSettings}
-      clickedCards={clickedCards}
-    />
-  } else if (gameSettings.stage === 2) {
-    currentLevel = <LevelTwo
-      cards={cards}
-      handleCardClick={handleCardClick}
-      gameSettings={gameSettings}
-      clickedCards={clickedCards}
-    />
-  } else if (gameSettings.stage === 3) {
-    currentLevel = <LevelThree
-      cards={cards}
-      handleCardClick={handleCardClick}
-      gameSettings={gameSettings}
-      clickedCards={clickedCards}
-    />
-  } else if (gameSettings.stage === 4) {
-    currentLevel = <LevelFour
-      cards={cards}
-      handleCardClick={handleCardClick}
-      gameSettings={gameSettings}
-      clickedCards={clickedCards}
-    />
-  }
 
 
 
   return (
-    <div className="App bg-primary-800 gap-8">
+    <div className="App bg-primary-800 grid grid-cols-1">
       {
         gameSettings.passedStage ?
           <PassedLevelScreen
@@ -154,9 +131,14 @@ export default function App() {
         :
         null}
 
-      < section className='levels-section p-8'>
+      < section className='level-section p-8'>
 
-        {currentLevel}
+        <Level
+          cards={cards}
+          handleCardClick={handleCardClick}
+          gameSettings={gameSettings}
+          clickedCards={clickedCards}
+        />
 
       </section>
 
