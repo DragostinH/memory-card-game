@@ -112,7 +112,7 @@ export default function App() {
 
 
   return (
-    <div className="App bg-primary-800 grid grid-cols-1">
+    <div className="App bg-primary-800 flex flex-col ">
       {
         gameSettings.passedStage ?
           <PassedLevelScreen
@@ -131,7 +131,7 @@ export default function App() {
         :
         null}
 
-      < section className='level-section p-8'>
+      < section className='level-section p-4'>
 
         <Level
           cards={cards}
