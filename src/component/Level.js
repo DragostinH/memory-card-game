@@ -10,8 +10,8 @@ export default function Level(props) {
         <article className="level-container grid gap-2">
             <div className="score-level-container grid grid-cols-score text-secondary-500">
                 <p className="text-center">Score:  <span className='font-bold'>{gameSettings.score}</span></p>
-                <p className="text-center">Level: <span className='font-bold'>{gameSettings.stage} - {gameSettings.level}</span></p>
-                <p className="text-center">High score:  <span className='font-bold'>{gameSettings.highScore}</span></p>
+                <p className="text-center">Level: <span className='font-bold'>{gameSettings.stage}-{gameSettings.level}</span></p>
+                <p className="text-center">High score:<span className='font-bold'>{gameSettings.highScore.join('-')}</span></p>
             </div>
             <div className="card-container grid grid-cols-cards gap-4">
                 {cards.map((card, index) => {

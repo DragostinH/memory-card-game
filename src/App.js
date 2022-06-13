@@ -3,11 +3,7 @@ import './App.css';
 import getArrayOfRandomNumbers from './scripts/getArrayOfRandomNumbers';
 import GameOverScreen from './component/GameOverScreen';
 import shuffleArray from './scripts/shuffleArray';
-import LevelOne from './component/LevelOne';
-import LevelTwo from './component/LevelTwo';
 import PassedLevelScreen from './component/PassedLevelScreen';
-import LevelThree from './component/LevelThree';
-import LevelFour from './component/LevelFour';
 import Level from './component/Level';
 
 export default function App() {
@@ -27,7 +23,7 @@ export default function App() {
     stage: 1,
     level: 1,
     score: 0,
-    highScore: 0,
+    highScore: [1, 1],
     isGameOver: false,
     passedStage: false,
     boardSize: 4,
@@ -51,9 +47,19 @@ export default function App() {
         passedStage: true,
         boardSize: gameSettings.boardSize + 3,
       });
-      setClickedCards([]);
     }
   }, [clickedCards.length, gameSettings]);
+
+  useEffect(() => {
+    const { stage, level, highScore } = gameSettings;
+    if (stage > highScore[0] || (stage === highScore[0] && level > highScore[1])) {
+      setGameSettings({
+        ...gameSettings,
+        highScore: [stage, level],
+      });
+
+    }
+  }, [gameSettings]);
 
 
   const handleCardClick = (card) => {
@@ -71,7 +77,7 @@ export default function App() {
         ...gameSettings,
         isGameOver: true,
       });
-    } else  {
+    } else {
       setClickedCards([...clickedCards, card]);
       setCards(cards.filter(item => item.id !== card.id));
       setCards(shuffleArray(cards));
@@ -80,7 +86,7 @@ export default function App() {
         score: gameSettings.score + 1,
         level: gameSettings.level + 1,
       });
-      
+
     }
   }
 
@@ -98,8 +104,8 @@ export default function App() {
   }
 
   const handleNextLevelClick = () => {
-    shuffleArray(cards);
-    shuffleArray(clickedCards);
+    // shuffleArray(cards);
+    setClickedCards([]);
     setGameSettings({
       ...gameSettings,
       passedStage: false,

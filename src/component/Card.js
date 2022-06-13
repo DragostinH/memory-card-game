@@ -15,7 +15,7 @@ export default function Card(props) {
             <img className="rounded-t-lg" src={image} alt="card" />
             <div className="name-and-status-container flex flex-col">
                 {charName.length > 1 ?
-                    <h2 className="text-center text-[0.6rem] text-secondary-500 font-bold">{charName[1]}</h2>
+                    <h2 className="text-center text-[0.6rem] text-secondary-500 font-bold">{charName[0]}{charName[1]}</h2>
                     :
                     <p className="text-center text-secondary-500 text-xs font-bold">{charName[0]}</p>
                 }
