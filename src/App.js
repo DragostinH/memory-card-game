@@ -7,6 +7,9 @@ import PassedLevelScreen from './component/PassedLevelScreen';
 import Level from './component/Level';
 import LoadingScreen from './component/LoadingScreen';
 import WelcomeScreen from './component/WelcomeScreen';
+import createStorageStructure from './scripts/createStorageStructure';
+import updateStorage from './scripts/updateStorage.js';
+import { generateCards } from './scripts/generateCards';
 
 export default function App() {
 
@@ -23,15 +26,19 @@ export default function App() {
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  const [firstTime, setFirstTime] = useState(true);
+
   useEffect(() => {
-    setIsLoading(true);
-    fetch(`https://rickandmortyapi.com/api/character/${getArrayOfRandomNumbers(gameSettings.boardSize)}`)
-      .then(response => response.json())
-      .then(data => {
-        setCards(shuffleArray(data));
-        setIsLoading(false);
-      });
-  }, [gameSettings.boardSize, gameSettings.stage]);
+    if (firstTime) {
+      fetch(`https://rickandmortyapi.com/api/character/${getArrayOfRandomNumbers(gameSettings.boardSize)}`)
+        .then(res => res.json())
+        .then(data => {
+          setCards(data);
+          setIsLoading(false);
+        }
+        )
+    }
+  }, [gameSettings.boardSize, gameSettings.stage, firstTime]);
 
   useEffect(() => {
     if (clickedCards.length === gameSettings.boardSize) {
@@ -54,6 +61,18 @@ export default function App() {
     }
   }, [gameSettings]);
 
+  useEffect(() => {
+    const checkStorage = localStorage.getItem('MemoryCardGame');
+    if (checkStorage) {
+      const storage = JSON.parse(checkStorage);
+      setGameSettings(storage[0]);
+      setCards(storage[1]);
+      setClickedCards(storage[2]);
+      setFirstTime(storage[3]);
+    }
+  }, []);
+
+
 
   const handleCardClick = (card) => {
     let isCardClicked = clickedCards.find(clickedCard => {
@@ -67,6 +86,7 @@ export default function App() {
         isGameOver: true,
       });
     } else {
+      updateStorage({ gameSettings, cards, clickedCards, firstTime });
       setClickedCards([...clickedCards, card]);
       setCards(cards.filter(item => item.id !== card.id));
       setCards([...cards, clickedCards])
@@ -88,8 +108,8 @@ export default function App() {
       stage: 1,
       boardSize: 4,
     });
-    setCards(shuffleArray(cards));
     setClickedCards([]);
+    setCards([]);
   };
 
   const handleNextLevelClick = () => {
@@ -102,12 +122,18 @@ export default function App() {
     });
   };
 
+  const handleStart = () => {
+    setFirstTime(false);
+    createStorageStructure({ gameSettings, cards, clickedCards, firstTime });
+  }
+
 
 
 
   return (
     <div className="App bg-primary-800 flex flex-col ">
-      {<WelcomeScreen />}
+      {firstTime ?
+        <WelcomeScreen handleStart={handleStart} /> : null}
 
       {
         gameSettings.passedStage ?
