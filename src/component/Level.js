@@ -1,4 +1,4 @@
-import React from "react";
+import React, { } from "react";
 import Card from "./Card";
 import uniqid from "uniqid";
 import "../index.css";
@@ -14,33 +14,24 @@ export default function Level(props) {
                 <p className="text-center">High score:<span className='font-bold'>{gameSettings.highScore.join('-')}</span></p>
             </div>
             <div className="card-container grid grid-cols-cards gap-4">
-                {cards.map((card, index) => {
-                    while (index < gameSettings.boardSize - clickedCards.length) {
+                {
+                    cards.map((card) => {
                         return (
                             <Card
                                 key={uniqid()}
-                                image={card.image}
                                 name={card.name}
+                                image={card.image}
                                 status={card.status}
-                                handleCardClick={() => handleCardClick(card)}
+                                handleCardClick={() => { handleCardClick(card) }}
+                                clickedCards={clickedCards}
                             />
                         )
-                    }
-                })}
-                {clickedCards.map((item) => {
-                    return (
-                        <Card
-                            key={uniqid()}
-                            image={item.image}
-                            name={item.name}
-                            status={item.status}
-                            handleCardClick={() => handleCardClick(item)}
-                            clickedCards={clickedCards}
-                            gameSettings={gameSettings}
-                        />)
-                })}
 
+                    })
+
+                }
             </div>
+
         </article>
     )
 }

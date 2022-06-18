@@ -5,18 +5,11 @@ import GameOverScreen from './component/GameOverScreen';
 import shuffleArray from './scripts/shuffleArray';
 import PassedLevelScreen from './component/PassedLevelScreen';
 import Level from './component/Level';
+import LoadingScreen from './component/LoadingScreen';
+import WelcomeScreen from './component/WelcomeScreen';
 
 export default function App() {
-  // Find images for the cards
-  // Create a list of cards
-  // Game should have multiple levels
-  // Get card images from an API
 
-  // https://rickandmortyapi.com/api/character/
-  // Every level increase the number of cards by 1
-  // Include the already selected cards in the list of cards
-
-  let currentLevel;
   const [cards, setCards] = useState([]);
   const [clickedCards, setClickedCards] = useState([]);
   const [gameSettings, setGameSettings] = useState({
@@ -28,17 +21,17 @@ export default function App() {
     passedStage: false,
     boardSize: 4,
   });
-
-
-
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    fetch(`https://rickandmortyapi.com/api/character/${getArrayOfRandomNumbers(200)}`)
+    setIsLoading(true);
+    fetch(`https://rickandmortyapi.com/api/character/${getArrayOfRandomNumbers(gameSettings.boardSize)}`)
       .then(response => response.json())
       .then(data => {
         setCards(shuffleArray(data));
+        setIsLoading(false);
       });
-  }, []);
+  }, [gameSettings.boardSize, gameSettings.stage]);
 
   useEffect(() => {
     if (clickedCards.length === gameSettings.boardSize) {
@@ -64,12 +57,8 @@ export default function App() {
 
   const handleCardClick = (card) => {
     let isCardClicked = clickedCards.find(clickedCard => {
-      if (clickedCard.id === card.id) {
-        return true;
-      } else {
-        return false;
-
-      }
+      return clickedCard.id === card.id ?
+        clickedCard.isClicked = true : false;
     });
 
     if (isCardClicked) {
@@ -80,15 +69,15 @@ export default function App() {
     } else {
       setClickedCards([...clickedCards, card]);
       setCards(cards.filter(item => item.id !== card.id));
+      setCards([...cards, clickedCards])
       setCards(shuffleArray(cards));
       setGameSettings({
         ...gameSettings,
         score: gameSettings.score + 1,
         level: gameSettings.level + 1,
       });
-
-    }
-  }
+    };
+  };
 
   const handlePlayAgainClick = () => {
     setGameSettings({
@@ -101,24 +90,25 @@ export default function App() {
     });
     setCards(shuffleArray(cards));
     setClickedCards([]);
-  }
+  };
 
   const handleNextLevelClick = () => {
-    // shuffleArray(cards);
     setClickedCards([]);
     setGameSettings({
       ...gameSettings,
       passedStage: false,
       stage: gameSettings.stage + 1,
       level: 1,
-    })
-  }
+    });
+  };
 
 
 
 
   return (
     <div className="App bg-primary-800 flex flex-col ">
+      {<WelcomeScreen />}
+
       {
         gameSettings.passedStage ?
           <PassedLevelScreen
@@ -129,24 +119,33 @@ export default function App() {
           null
       }
 
-      {gameSettings.isGameOver ?
-        <GameOverScreen
-          handlePlayAgainClick={handlePlayAgainClick}
-          gameSettings={gameSettings}
-        />
-        :
-        null}
+      {
+        gameSettings.isGameOver ?
+          <GameOverScreen
+            handlePlayAgainClick={handlePlayAgainClick}
+            gameSettings={gameSettings}
+          />
+          :
+          null
+      }
 
-      < section className='level-section p-4'>
-
+      <section className='level-section p-4'>
         <Level
           cards={cards}
           handleCardClick={handleCardClick}
           gameSettings={gameSettings}
           clickedCards={clickedCards}
+          isLoading={isLoading}
         />
-
       </section>
+
+      {
+        isLoading ?
+          <div className="loader">
+            {<LoadingScreen />}
+          </div> :
+          null
+      }
 
     </div >
   );

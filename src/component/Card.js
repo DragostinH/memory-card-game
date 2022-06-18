@@ -4,7 +4,7 @@ import "../index.css";
 
 export default function Card(props) {
 
-    const { image, name, status, handleCardClick, } = props;
+    const { image, name, handleCardClick, } = props;
 
     let charName = name.split(' ');
 
@@ -18,12 +18,6 @@ export default function Card(props) {
                     <h2 className="text-center text-[0.6rem] text-secondary-500 font-bold">{charName[0]}{charName[1]}</h2>
                     :
                     <p className="text-center text-secondary-500 text-xs font-bold">{charName[0]}</p>
-                }
-                {
-                    status === "Alive" ?
-                        <p className="text-secondary-500 text-sm uppercase bg-primary-900 rounded-b-lg text-center">{status}</p>
-                        :
-                        <p className="text-[rgb(255,255,255)] text-sm uppercase text-center bg-secondary-900 rounded-b-lg">{status}</p>
                 }
             </div>
         </div>
