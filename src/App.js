@@ -29,16 +29,16 @@ export default function App() {
   const [firstTime, setFirstTime] = useState(true);
 
   useEffect(() => {
-    if (firstTime) {
-      fetch(`https://rickandmortyapi.com/api/character/${getArrayOfRandomNumbers(gameSettings.boardSize)}`)
-        .then(res => res.json())
-        .then(data => {
-          setCards(data);
-          setIsLoading(false);
-        }
-        )
-    }
-  }, [gameSettings.boardSize, gameSettings.stage, firstTime]);
+
+    fetch(`https://rickandmortyapi.com/api/character/${getArrayOfRandomNumbers(gameSettings.boardSize)}`)
+      .then(res => res.json())
+      .then(data => {
+        setCards(data);
+        setIsLoading(false);
+      }
+      )
+      .catch(err => console.log(err));
+  }, [gameSettings.boardSize, gameSettings.stage, firstTime, gameSettings.isGameOver]);
 
   useEffect(() => {
     if (clickedCards.length === gameSettings.boardSize) {
@@ -109,7 +109,6 @@ export default function App() {
       boardSize: 4,
     });
     setClickedCards([]);
-    setCards([]);
   };
 
   const handleNextLevelClick = () => {
